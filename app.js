@@ -1,8 +1,8 @@
 (() => {
   const TOTAL_QUESTIONS = 25;
   const POINTS_PER_CORRECT = 4; // 25問 × 4点 = 100点満点
-  // sw.js の APP_VERSION と揃える
-  const APP_VERSION = "1.0.3";
+  // sw.js / version.json / sw-register.js の LOCAL_VERSION と揃える
+  const APP_VERSION = "1.0.4";
   const STORAGE_KEY = "rikkuku-scores";
   const HISTORY_WEEKS = 4;
   const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"];

@@ -11,6 +11,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="りっくく" />
+    <meta name="rikkuku-version" content="1.0.4" />
     <title>りっくく — 九九特訓</title>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="icons/icon-192.png" type="image/png" />
@@ -21,7 +22,41 @@
       href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Yusei+Magic&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=1.0.4" />
+    <script>
+      // 古いSWキャッシュに閉じ込められた端末向け：公開版と食い違えば強制更新
+      (function () {
+        var LOCAL = "1.0.4";
+        fetch("./version.json?_=" + Date.now(), { cache: "no-store" })
+          .then(function (res) {
+            return res.ok ? res.json() : null;
+          })
+          .then(function (data) {
+            if (!data || !data.version || data.version === LOCAL) return;
+            var done = function () {
+              location.reload();
+            };
+            var clearCaches = function () {
+              if (!("caches" in window)) return Promise.resolve();
+              return caches.keys().then(function (keys) {
+                return Promise.all(keys.map(function (k) {
+                  return caches.delete(k);
+                }));
+              });
+            };
+            var unreg = Promise.resolve();
+            if ("serviceWorker" in navigator) {
+              unreg = navigator.serviceWorker.getRegistrations().then(function (regs) {
+                return Promise.all(regs.map(function (r) {
+                  return r.unregister();
+                }));
+              });
+            }
+            unreg.then(clearCaches).then(done).catch(done);
+          })
+          .catch(function () {});
+      })();
+    </script>
   </head>
   <body>
     <div class="atmosphere" aria-hidden="true"></div>
@@ -121,8 +156,8 @@
       </section>
     </main>
 
-    <script src="app.js"></script>
-    <script src="sw-register.js"></script>
+    <script src="app.js?v=1.0.4"></script>
+    <script src="sw-register.js?v=1.0.4"></script>
   </body>
 </html>
 

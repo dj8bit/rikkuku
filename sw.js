@@ -1,5 +1,5 @@
-/* バージョンを上げると新しいキャッシュに切り替わります */
-const APP_VERSION = "1.0.3";
+/* バージョンを上げるときは version.json / app.js も揃える */
+const APP_VERSION = "1.0.4";
 const CACHE_NAME = `rikkuku-${APP_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -15,7 +15,13 @@ const PRECACHE_URLS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS)),
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      // addAll は1件失敗で全体失敗→更新が永遠に入らないため個別に入れる
+      await Promise.all(
+        PRECACHE_URLS.map((url) => cache.add(url).catch(() => undefined)),
+      );
+    })(),
   );
   self.skipWaiting();
 });
@@ -47,16 +53,23 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // HTML / マニフェスト / SW登録はネット優先で更新を拾いやすくする
+  // バージョン確認は常にネットから（キャッシュしない）
+  if (url.pathname.endsWith("/version.json") || url.pathname.endsWith("version.json")) {
+    event.respondWith(fetch(request, { cache: "no-store" }));
+    return;
+  }
+
   const isNavigate = request.mode === "navigate";
+  const path = url.pathname;
   const isShell =
     isNavigate ||
-    url.pathname.endsWith(".html") ||
-    url.pathname.endsWith("manifest.webmanifest") ||
-    url.pathname.endsWith("sw-register.js") ||
-    url.pathname.endsWith("app.js") ||
-    url.pathname.endsWith("styles.css") ||
-    url.pathname.endsWith("/");
+    path.endsWith(".html") ||
+    path.endsWith("manifest.webmanifest") ||
+    path.endsWith("sw-register.js") ||
+    path.endsWith("app.js") ||
+    path.endsWith("styles.css") ||
+    path.endsWith("/") ||
+    /\/$/.test(path);
 
   if (isShell) {
     event.respondWith(networkFirst(request));
@@ -69,13 +82,16 @@ self.addEventListener("fetch", (event) => {
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_NAME);
   try {
-    const fresh = await fetch(request);
+    // HTTPキャッシュも使わず最新を取りにいく
+    const fresh = await fetch(request, { cache: "no-store" });
     if (fresh && fresh.ok) {
       cache.put(request, fresh.clone());
     }
     return fresh;
   } catch {
-    const cached = await cache.match(request);
+    const cached =
+      (await cache.match(request)) ||
+      (await cache.match(request, { ignoreSearch: true }));
     if (cached) return cached;
     if (request.mode === "navigate") {
       const fallback = await cache.match("./index.html");
@@ -87,7 +103,9 @@ async function networkFirst(request) {
 
 async function cacheFirst(request) {
   const cache = await caches.open(CACHE_NAME);
-  const cached = await cache.match(request);
+  const cached =
+    (await cache.match(request)) ||
+    (await cache.match(request, { ignoreSearch: true }));
   if (cached) return cached;
   const fresh = await fetch(request);
   if (fresh && fresh.ok) {
