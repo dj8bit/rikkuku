@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"
+    />
+    <meta name="theme-color" content="#0b5f63" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="りっくく" />
+    <title>りっくく — 九九特訓</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Yusei+Magic&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true"></div>
+
+    <main class="app">
+      <!-- スタート -->
+      <section id="screen-start" class="screen is-active" aria-label="スタート">
+        <div class="start-stage">
+          <p class="brand">りっくく</p>
+          <p class="app-version" id="app-version"></p>
+
+          <section class="history" aria-labelledby="history-title">
+            <p id="streak" class="streak" aria-live="polite">0日れんぞく！</p>
+            <h2 id="history-title" class="history-title">これまでのハンコ</h2>
+            <p class="history-range" id="history-range"></p>
+            <div class="cal-weekdays" aria-hidden="true">
+              <span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span><span>日</span>
+            </div>
+            <div id="calendar" class="calendar" role="grid" aria-label="過去4週間の成績"></div>
+            <ul class="cal-legend" aria-label="ハンコの見かた">
+              <li><span class="cal-stamp" data-kind="perfect">よく</span>100点</li>
+              <li><span class="cal-stamp" data-kind="almost">あと</span>90〜99点</li>
+              <li><span class="cal-stamp" data-kind="try">がん</span>90点未満</li>
+            </ul>
+          </section>
+
+          <button type="button" id="btn-start" class="btn btn-primary">
+            はじめる
+          </button>
+        </div>
+      </section>
+
+      <!-- 出題 -->
+      <section id="screen-quiz" class="screen" aria-label="出題" hidden>
+        <header class="quiz-top">
+          <p class="brand brand-sm">りっくく</p>
+          <div class="progress" aria-live="polite">
+            <span id="progress-label">1 / 25</span>
+            <div class="progress-track" aria-hidden="true">
+              <div id="progress-bar" class="progress-bar"></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="quiz-body">
+          <p class="question" id="question" aria-live="polite">
+            <span id="q-left">1</span><span class="times">×</span><span id="q-right">1</span>
+          </p>
+          <form id="answer-form" class="answer-form" autocomplete="off">
+            <label class="sr-only" for="answer-input">答え</label>
+            <input
+              id="answer-input"
+              class="answer-input"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              enterkeyhint="done"
+              maxlength="2"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              required
+            />
+            <button type="submit" class="sr-only">こたえる</button>
+          </form>
+        </div>
+      </section>
+
+      <div id="feedback" class="feedback-overlay" aria-live="assertive" hidden>
+        <p id="feedback-text" class="feedback-text"></p>
+      </div>
+
+      <!-- 結果 -->
+      <section id="screen-result" class="screen" aria-label="結果" hidden>
+        <div class="result-stage">
+          <p class="brand brand-sm">りっくく</p>
+          <p class="result-label">けっか</p>
+          <p class="score-line">
+            <span id="score-value" class="score-value">0</span>
+            <span class="score-unit">てん</span>
+          </p>
+          <p class="score-detail">
+            <span id="correct-count">0</span>問せいかい / 25問
+          </p>
+
+          <div class="stamp-wrap" aria-live="polite">
+            <div id="stamp" class="stamp" data-kind="try">
+              <span id="stamp-text">がんばりましょう</span>
+            </div>
+          </div>
+
+          <button type="button" id="btn-home" class="btn btn-primary">
+            トップに戻る
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+    <script src="sw-register.js"></script>
+  </body>
+</html>
+
