@@ -2,8 +2,9 @@
   const TOTAL_QUESTIONS = 25;
   const POINTS_PER_CORRECT = 4; // 25問 × 4点 = 100点満点
   // sw.js / version.json / sw-register.js の LOCAL_VERSION と揃える
-  const APP_VERSION = "1.0.4";
+  const APP_VERSION = "1.0.5";
   const STORAGE_KEY = "rikkuku-scores";
+  const AUTO_ENTER_KEY = "rikkuku-auto-enter";
   const HISTORY_WEEKS = 4;
   const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -32,10 +33,39 @@
     historyRange: document.getElementById("history-range"),
     streak: document.getElementById("streak"),
     appVersion: document.getElementById("app-version"),
+    autoEnter: document.getElementById("auto-enter"),
   };
 
   if (els.appVersion) {
     els.appVersion.textContent = `v${APP_VERSION}`;
+  }
+
+  function loadAutoEnter() {
+    try {
+      const raw = localStorage.getItem(AUTO_ENTER_KEY);
+      if (raw === null) return true;
+      return raw === "1";
+    } catch {
+      return true;
+    }
+  }
+
+  function saveAutoEnter(enabled) {
+    try {
+      localStorage.setItem(AUTO_ENTER_KEY, enabled ? "1" : "0");
+    } catch {
+      // ignore
+    }
+  }
+
+  let autoEnterEnabled = loadAutoEnter();
+  if (els.autoEnter) {
+    els.autoEnter.checked = autoEnterEnabled;
+    els.autoEnter.addEventListener("change", () => {
+      autoEnterEnabled = els.autoEnter.checked;
+      saveAutoEnter(autoEnterEnabled);
+      els.input.focus({ preventScroll: true });
+    });
   }
 
   /** @type {{ a: number, b: number, answer: number }[]} */
@@ -473,7 +503,7 @@
     const digits = expectedDigits(queue[index].answer);
     els.input.value = els.input.value.replace(/\D/g, "").slice(0, digits);
 
-    if (els.input.value.length === digits) {
+    if (autoEnterEnabled && els.input.value.length === digits) {
       els.form.requestSubmit();
     }
   });

@@ -11,7 +11,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="りっくく" />
-    <meta name="rikkuku-version" content="1.0.4" />
+    <meta name="rikkuku-version" content="1.0.5" />
     <title>りっくく — 九九特訓</title>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="icons/icon-192.png" type="image/png" />
@@ -22,11 +22,11 @@
       href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Yusei+Magic&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=1.0.4" />
+    <link rel="stylesheet" href="styles.css?v=1.0.5" />
     <script>
       // 古いSWキャッシュに閉じ込められた端末向け：公開版と食い違えば強制更新
       (function () {
-        var LOCAL = "1.0.4";
+        var LOCAL = "1.0.5";
         fetch("./version.json?_=" + Date.now(), { cache: "no-store" })
           .then(function (res) {
             return res.ok ? res.json() : null;
@@ -121,6 +121,16 @@
               spellcheck="false"
               required
             />
+            <label class="auto-enter" for="auto-enter">
+              <span class="auto-enter-label">自動エンター</span>
+              <input
+                type="checkbox"
+                id="auto-enter"
+                class="auto-enter-input"
+                checked
+              />
+              <span class="auto-enter-switch" aria-hidden="true"></span>
+            </label>
             <button type="submit" class="sr-only">こたえる</button>
           </form>
         </div>
@@ -156,8 +166,8 @@
       </section>
     </main>
 
-    <script src="app.js?v=1.0.4"></script>
-    <script src="sw-register.js?v=1.0.4"></script>
+    <script src="app.js?v=1.0.5"></script>
+    <script src="sw-register.js?v=1.0.5"></script>
   </body>
 </html>
 

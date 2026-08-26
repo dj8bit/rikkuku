@@ -1,5 +1,5 @@
 /* バージョンを上げるときは version.json / app.js も揃える */
-const APP_VERSION = "1.0.4";
+const APP_VERSION = "1.0.5";
 const CACHE_NAME = `rikkuku-${APP_VERSION}`;
 
 const PRECACHE_URLS = [
