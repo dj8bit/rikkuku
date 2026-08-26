@@ -2,7 +2,7 @@
   const TOTAL_QUESTIONS = 25;
   const POINTS_PER_CORRECT = 4; // 25問 × 4点 = 100点満点
   // sw.js / version.json / sw-register.js の LOCAL_VERSION と揃える
-  const APP_VERSION = "1.0.5";
+  const APP_VERSION = "1.0.6";
   const STORAGE_KEY = "rikkuku-scores";
   const AUTO_ENTER_KEY = "rikkuku-auto-enter";
   const HISTORY_WEEKS = 4;
@@ -32,6 +32,7 @@
     calendar: document.getElementById("calendar"),
     historyRange: document.getElementById("history-range"),
     streak: document.getElementById("streak"),
+    combo: document.getElementById("combo"),
     appVersion: document.getElementById("app-version"),
     autoEnter: document.getElementById("auto-enter"),
   };
@@ -182,8 +183,24 @@
     return streak;
   }
 
+  /** 100点の連続。未実施日は無視し、100点未満の実施日で途切れる */
+  function calcCombo(scores) {
+    const keys = Object.keys(scores).sort((a, b) => (a < b ? 1 : a > b ? -1 : 0));
+    let combo = 0;
+    for (const key of keys) {
+      if (scores[key].score >= 100) {
+        combo += 1;
+      } else {
+        break;
+      }
+    }
+    return combo;
+  }
+
   function renderStreak(scores, today = startOfDay(new Date())) {
     const streak = calcStreak(scores, today);
+    const combo = calcCombo(scores);
+    if (els.combo) els.combo.textContent = `${combo}コンボ！`;
     els.streak.textContent = `${streak}日れんぞく！`;
   }
 

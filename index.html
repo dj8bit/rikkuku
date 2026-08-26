@@ -11,7 +11,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="りっくく" />
-    <meta name="rikkuku-version" content="1.0.5" />
+    <meta name="rikkuku-version" content="1.0.6" />
     <title>りっくく — 九九特訓</title>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="icons/icon-192.png" type="image/png" />
@@ -22,11 +22,11 @@
       href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Yusei+Magic&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=1.0.5" />
+    <link rel="stylesheet" href="styles.css?v=1.0.6" />
     <script>
       // 古いSWキャッシュに閉じ込められた端末向け：公開版と食い違えば強制更新
       (function () {
-        var LOCAL = "1.0.5";
+        var LOCAL = "1.0.6";
         fetch("./version.json?_=" + Date.now(), { cache: "no-store" })
           .then(function (res) {
             return res.ok ? res.json() : null;
@@ -69,6 +69,7 @@
           <p class="app-version" id="app-version"></p>
 
           <section class="history" aria-labelledby="history-title">
+            <p id="combo" class="combo" aria-live="polite">0コンボ！</p>
             <p id="streak" class="streak" aria-live="polite">0日れんぞく！</p>
             <h2 id="history-title" class="history-title">これまでのハンコ</h2>
             <p class="history-range" id="history-range"></p>
@@ -166,8 +167,8 @@
       </section>
     </main>
 
-    <script src="app.js?v=1.0.5"></script>
-    <script src="sw-register.js?v=1.0.5"></script>
+    <script src="app.js?v=1.0.6"></script>
+    <script src="sw-register.js?v=1.0.6"></script>
   </body>
 </html>
 

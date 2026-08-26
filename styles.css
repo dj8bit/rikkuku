@@ -168,6 +168,15 @@ body {
   color: var(--coral-deep);
 }
 
+.combo {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: #1a6fb5;
+}
+
 .history-title {
   margin: 0;
   font-size: 0.95rem;
