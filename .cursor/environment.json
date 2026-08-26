@@ -1,0 +1,16 @@
+{
+  "name": "りっくく — 九九特訓",
+  "install": "npm ci",
+  "terminals": [
+    {
+      "name": "dev-server",
+      "command": "npm run dev"
+    }
+  ],
+  "ports": [
+    {
+      "name": "PWA",
+      "port": 3000
+    }
+  ]
+}
