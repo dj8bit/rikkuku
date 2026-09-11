@@ -1,0 +1,13 @@
+{
+  "name": "rikkuku",
+  "version": "1.0.5",
+  "private": true,
+  "description": "りっくく — 九九特訓 PWA（静的サイト）",
+  "scripts": {
+    "dev": "serve --config serve.json --listen 3000 .",
+    "start": "serve --config serve.json --listen 3000 ."
+  },
+  "devDependencies": {
+    "serve": "^14.2.5"
+  }
+}
