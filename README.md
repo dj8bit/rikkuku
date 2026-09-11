@@ -2,6 +2,8 @@
 
 九九（かけ算）をランダム出題で特訓する、スマホ向けの PWA（Progressive Web App）です。1 回 25 問を解き、点数に応じて「ハンコ」がもらえます。過去の成績はカレンダーに記録され、連続日数（れんぞく）も表示されます。
 
+**公開URL: <https://dj8bit.github.io/rikkuku/>**（GitHub Pages）
+
 ビルド工程のない素の HTML / CSS / JavaScript で作られており、`serve` などの静的サーバでそのまま配信できます。
 
 ## 特長
@@ -68,6 +70,10 @@ npm run dev
 - `index.html` の `<meta name="rikkuku-version">`、冒頭スクリプトの `LOCAL` 定数、各アセットのクエリ文字列（`?v=...`）
 
 `version.json` を公開版に上げると、古い Service Worker キャッシュに閉じ込められた端末でも `index.html` 冒頭のスクリプトが差分を検知し、キャッシュ削除と再読み込みを行って最新版に更新します。
+
+## デプロイ（GitHub Pages）
+
+<https://dj8bit.github.io/rikkuku/> で公開しています。`master` に push すると `.github/workflows/deploy-pages.yml` が実行され、静的ファイルのみを GitHub Pages へ自動デプロイします（`README` や `package.json`、`.cursor/` などは公開対象外）。
 
 ## 遊び方
 
